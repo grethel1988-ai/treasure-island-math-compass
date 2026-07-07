@@ -4,6 +4,8 @@ import docx
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
+from docx.oxml import parse_xml
+import re
 
 def set_run_font(run, font_name="微軟正黑體", size_pt=11, bold=False, italic=False, color_rgb=None):
     run.font.name = font_name
@@ -17,6 +19,45 @@ def set_run_font(run, font_name="微軟正黑體", size_pt=11, bold=False, itali
     run.italic = italic
     if color_rgb:
         run.font.color.rgb = color_rgb
+
+def add_formatted_text(p, text, font_name="微軟正黑體", size_pt=11, bold=False, italic=False, color_rgb=None):
+    # Regex to match mixed fraction (e.g. 1又2/5) or simple fraction (e.g. 7/5)
+    fraction_re = re.compile(r'(\d+又\d+/\d+|\d+/\d+)')
+    parts = fraction_re.split(text)
+    for part in parts:
+        if not part:
+            continue
+        if '/' in part:
+            if '又' in part:
+                match = re.match(r'(\d+)又(\d+)/(\d+)', part)
+                integer_part = match.group(1)
+                num = match.group(2)
+                den = match.group(3)
+                xml = (
+                    '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">'
+                    f'<m:r><m:t>{integer_part}</m:t></m:r>'
+                    '<m:f>'
+                    f'<m:num><m:r><m:t>{num}</m:t></m:r></m:num>'
+                    f'<m:den><m:r><m:t>{den}</m:t></m:r></m:den>'
+                    '</m:f>'
+                    '</m:oMath>'
+                )
+            else:
+                match = re.match(r'(\d+)/(\d+)', part)
+                num = match.group(1)
+                den = match.group(2)
+                xml = (
+                    '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">'
+                    '<m:f>'
+                    f'<m:num><m:r><m:t>{num}</m:t></m:r></m:num>'
+                    f'<m:den><m:r><m:t>{den}</m:t></m:r></m:den>'
+                    '</m:f>'
+                    '</m:oMath>'
+                )
+            p._p.append(parse_xml(xml))
+        else:
+            run = p.add_run(part)
+            set_run_font(run, font_name=font_name, size_pt=size_pt, bold=bold, italic=italic, color_rgb=color_rgb)
 
 def create_document():
     doc = docx.Document()
@@ -119,7 +160,7 @@ def create_document():
         {
             "indicator": "指標編碼：n-III-3 ── 認識因數、倍數、質數、最大公因數、最小公倍數的意義、計算與應用。",
             "num": 7,
-            "text": "「伊斯班紐拉號」的廚房裡儲備了 45個蘋果 and 60個梨子以防敗血症。獨腳廚師「西爾弗」想把它們平分裝進木箱中，每箱的蘋果要一樣多，梨子也要一樣多。請問最多可以裝成幾箱？此時每箱有幾個蘋果？",
+            "text": "「伊斯班紐拉號」的廚房裡儲備了 45個蘋果和 60個梨子以防敗血症。獨腳廚師「西爾弗」想把它們平分裝進木箱中，每箱的蘋果要一樣多，梨子也要一樣多。請問最多可以裝成幾箱？此時每箱有幾個蘋果？",
             "options": [
                 "(A) 最多 5箱；每箱有 9個蘋果",
                 "(B) 最多 15箱；每箱有 3個蘋果",
@@ -231,7 +272,7 @@ def create_document():
                 "(A) 0.4；除數與被除數的小數點同時往左移一位",
                 "(B) 4；除數與被除數的小數點同時往右移一位",
                 "(C) 4；只有除數的小數點需要往右移一位",
-                "(D) 40；除數小數點往右移帶兩位，被除數往右移一位"
+                "(D) 40；除數小數點往右移兩位，被除數往右移一位"
             ]
         },
 
@@ -447,7 +488,7 @@ def create_document():
                 "(A) 表面積64平方公寸，體積512立方公寸",
                 "(B) 表面積384平方公寸，體積384立方公寸",
                 "(C) 表面積384平方公寸，體積512立方公寸",
-                "(D) 表面積512平方公寸, 體積384立方公寸"
+                "(D) 表面積512平方公寸，體積384立方公寸"
             ]
         },
 
@@ -483,7 +524,7 @@ def create_document():
             "options": [
                 "(A) 沿著一條線對折後，兩邊不會重合的圖形；如平行四邊形",
                 "(B) 沿著一條線對折後，兩邊能完全重合的圖形；如蝴蝶",
-                "(C) 沿著一個點逆時針旋轉後能完全重合的圖形；如風車",
+                "(C) 沿著一個點旋轉後能完全重合的圖形；如風車",
                 "(D) 面積一樣大但形狀不同的圖形；如拼圖"
             ]
         },
@@ -514,7 +555,7 @@ def create_document():
         {
             "indicator": "指標編碼：s-III-7 ── 認識平面圖形縮放的意義與應用。",
             "num": 40,
-            "text": "船長把長 10公分、寬 6公分的長方形「伊斯班紐拉號」艙位圖，縮小為 1/2 倍繪製在筆記本上。這張縮小圖的長、寬和面積各是多少？",
+            "text": "船長把長 10公分、寬 6公分的長方形「伊斯班紐拉號」艙位圖，縮小為 1/2 倍繪製在筆記本上。這張縮小圖的長、寬 and 面積各是多少？",
             "options": [
                 "(A) 長 5公分、寬 3公分，面積 30平方公分",
                 "(B) 長 5公分、寬 3公分，面積 15平方公分",
@@ -623,7 +664,7 @@ def create_document():
         {
             "indicator": "指標編碼：d-III-2 ── 能從資料或圖表的資料數據，解決關於「可能性」的簡單問題。",
             "num": 49,
-            "text": "「班·甘恩」把 8 顆黑石子和 2 顆白石子放進袋子裡。「吉姆」不看袋子摸出一顆石子，摸到黑石子的可能性大還是白石子大？為什麼？",
+            "text": "「班·甘恩」把 8 顆黑石子 and 2 顆白石子放進袋子裡。「吉姆」不看袋子摸出一顆石子，摸到黑石子的可能性大還是白石子大？為什麼？",
             "options": [
                 "(A) 白石子大；因為白石子比較顯眼",
                 "(B) 黑石子大；因為黑石子數量比較多",
@@ -671,9 +712,9 @@ def create_document():
             
         # Add question
         q_p = doc.add_paragraph()
-        # Question numbering in document should be relative to 50
-        q_run = q_p.add_run(f"{q['num']}. {q['text']}")
-        set_run_font(q_run, font_name="微軟正黑體", size_pt=11, bold=False, color_rgb=RGBColor(51, 51, 51))
+        num_run = q_p.add_run(f"{q['num']}. ")
+        set_run_font(num_run, font_name="微軟正黑體", size_pt=11, bold=False, color_rgb=RGBColor(51, 51, 51))
+        add_formatted_text(q_p, q['text'], font_name="微軟正黑體", size_pt=11, bold=False, color_rgb=RGBColor(51, 51, 51))
         q_p.paragraph_format.space_before = Pt(6)
         q_p.paragraph_format.space_after = Pt(4)
         
@@ -683,8 +724,12 @@ def create_document():
             opt_p.paragraph_format.left_indent = Inches(0.4)
             opt_p.paragraph_format.space_before = Pt(0)
             opt_p.paragraph_format.space_after = Pt(2)
-            opt_run = opt_p.add_run(opt)
-            set_run_font(opt_run, font_name="微軟正黑體", size_pt=10.5, color_rgb=RGBColor(70, 70, 70))
+            # Prefix like "(A) "
+            prefix = opt[:4]
+            opt_text = opt[4:]
+            prefix_run = opt_p.add_run(prefix)
+            set_run_font(prefix_run, font_name="微軟正黑體", size_pt=10.5, color_rgb=RGBColor(70, 70, 70))
+            add_formatted_text(opt_p, opt_text, font_name="微軟正黑體", size_pt=10.5, color_rgb=RGBColor(70, 70, 70))
             
     # Save document
     output_path = r"D:\國小數學能力指標-高年級-金銀島的密碼羅盤\第三學習階段遊戲題庫.docx"
