@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏴‍☠️ 線上數學冒險：金銀島的密碼羅盤</title>
+  <meta name="description" content="國小數學第三階段(高年級)能力指標遊戲式線上測驗，結合弗林特船長寶藏與金銀島角色故事。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Fullscreen Canvas Overlay for Coins and Fireworks -->
+  <canvas id="canvas-overlay"></canvas>
+
+  <div class="game-container">
+    
+    <!-- SCREEN 1: Introduction -->
+    <div id="screen-intro" class="screen active">
+      <div class="parchment-card intro-content">
+        <div class="logo-container">
+          <div class="logo-skull">☠️</div>
+          <h1 class="logo-title">金銀島的密碼羅盤</h1>
+          <div class="logo-subtitle">國小數學第三學習階段（高年級）能力指標題庫總匯</div>
+        </div>
+        
+        <div class="story-box" style="line-height: 1.8; text-align: left;">
+          <strong>📖 遊戲前導：航向神祕的未知</strong><br>
+          「砰！老海盜比爾的房間被踢開，西爾弗帶著叛變的海盜們殺到了！」<br>
+          你在老水手比利·蓬斯的衣物箱底層，發現了傳奇海盜首領弗林特船長留下的藏寶圖！上面用紅墨水狠狠畫了三個「X」，寫著：「總價值 70 萬英鎊的黃金，就在這裡。」<br>
+          此時，獨腳海盜「約翰·西爾弗」已經煽動了整艘伊斯帕尼奧拉號的海盜發起叛變，在荒島的叢林與沙灘上對你們展開瘋狂追捕。<br>
+          為了趕在西爾弗之前找到寶藏，你必須搭上「伊斯班紐拉號」前往荒島。一路上，無數的機關與密碼正等著你，你必須收集散落在島上三大區域的「數學解謎金幣」。<br>
+          別擔心，一路上會有夥伴陪你一起闖關。拿起你的武器（鉛筆與計算紙），揚帆出發！
+        </div>
+
+        <div class="name-input-group" style="margin-top: 25px;">
+          <label for="player-name">⚔️ 請輸入您的冒險家姓名：</label>
+          <input type="text" id="player-name" class="input-field" placeholder="例如：傑克船長" maxlength="15">
+          <button id="btn-start-adventure" class="btn-gold" style="margin-top: 15px;">開始冒險</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: Companion Character Selection -->
+    <div id="screen-character" class="screen">
+      <div class="parchment-card">
+        <h2 class="char-title">選擇你的海盜夥伴</h2>
+        <p class="char-subtitle">出發前，請選擇一位夥伴同行，牠們會在點擊、答對 or 答錯時跳出來對話喔！</p>
+        
+        <div id="char-grid" class="char-grid">
+          <!-- Dynamic rendering from game.js -->
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <button id="btn-confirm-character" class="btn-gold">確認選擇</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Difficulty Selection -->
+    <div id="screen-difficulty" class="screen">
+      <div class="parchment-card" style="max-width: 580px; width: 90%;">
+        <h2 class="char-title">選擇航海難度</h2>
+        <p class="char-subtitle" style="margin-bottom: 20px;">海盜獨腳西爾弗正在後方追趕！<br>選擇適合您的路線與生命準備：</p>
+        
+        <div class="difficulty-options" style="display: flex; flex-direction: column; gap: 15px; margin: 25px 0;">
+          <div class="diff-card" data-diff="easy" style="border: 2px solid var(--color-border); padding: 15px 20px; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease; background: rgba(255,255,255,0.4);">
+            <div style="font-weight: bold; font-size: 1.15rem; color: var(--color-accent-green); margin-bottom: 5px;">🗺️ 1. 骷髏礁的座標航線 (簡單)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark); margin-bottom: 3px;">答題數：<strong>25 題</strong> (50題隨機抽選)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark);">生命值：<strong>🪙 3 個金幣</strong> (容錯率低，考驗精準度)</div>
+          </div>
+          
+          <div class="diff-card" data-diff="medium" style="border: 2px solid var(--color-border); padding: 15px 20px; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease; background: rgba(255,255,255,0.4);">
+            <div style="font-weight: bold; font-size: 1.15rem; color: var(--color-gold); margin-bottom: 5px;">🍻 2. 西爾弗的混亂酒館 (中等)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark); margin-bottom: 3px;">答題數：<strong>40 題</strong> (50題隨機抽選)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark);">生命值：<strong>🪙 7 個金幣</strong> (正常難度，適合穩紮穩打)</div>
+          </div>
+          
+          <div class="diff-card selected" data-diff="hard" style="border: 2px solid var(--color-border); padding: 15px 20px; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.2s ease; background: rgba(255,255,255,0.4);">
+            <div style="font-weight: bold; font-size: 1.15rem; color: var(--color-accent-red); margin-bottom: 5px;">👑 3. 弗林特的黃金密碼 (困難)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark); margin-bottom: 3px;">答題數：<strong>50 題</strong> (完整挑戰)</div>
+            <div style="font-size: 0.95rem; color: var(--color-text-dark);">生命值：<strong>🪙 10 個金幣</strong> (全能大冒險，考驗持續戰鬥力)</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px;">
+          <button id="btn-start-gameplay" class="btn-gold">確認難度，揚帆起航！</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: Gameplay HUD -->
+    <div id="screen-game" class="screen">
+      <div class="game-layout">
+        
+        <!-- Left: Question Area -->
+        <div class="parchment-card question-panel" id="gameplay-card">
+          <div>
+            <!-- Status Bar showing Player, Score and Health -->
+            <div class="game-status-bar" style="display: flex; justify-content: space-between; align-items: center; background: rgba(139,90,43,0.06); padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; border: 1px solid rgba(139,90,43,0.12);">
+              <div style="font-weight: bold; color: var(--color-text-dark); font-size: 0.95rem;">
+                👤 冒險家: <span id="game-player-name" style="color: var(--color-accent-red); font-weight: 900;">-</span>
+              </div>
+              <div style="font-weight: bold; color: var(--color-text-dark); font-size: 0.95rem;">
+                🪙 得分: <span id="game-score-display" style="color: var(--color-accent-green); font-weight: 900;">0 / 50</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="font-weight: bold; color: var(--color-text-dark); font-size: 0.95rem; margin-right: 3px;">❤️ 生命值:</span>
+                <div id="game-health-coins" style="display: flex; gap: 3px;">
+                  <!-- Renders 10 gold coin icons -->
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span id="current-stage-title" class="stage-badge">⚓ 第一關：班波提督亭</span>
+              <span id="question-progress-num" class="progress-text">第 1 / 50 題</span>
+            </div>
+            
+            <div id="question-indicator-hint" class="indicator-hint">
+              指標編碼: n-III-1
+            </div>
+            
+            <div id="question-text" class="question-text-box">
+              正在載入題目，請稍候...
+            </div>
+          </div>
+          
+          <div id="options-grid" class="options-grid">
+            <!-- 4 Option buttons rendered from game.js -->
+          </div>
+        </div>
+
+        <!-- Right: Companion Character Dialog -->
+        <div class="parchment-card companion-panel">
+          <div class="companion-avatar-box" id="companion-avatar-area">
+            <div id="game-avatar-placeholder" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+              <!-- Renders selected partner SVG -->
+            </div>
+          </div>
+          
+          <div class="dialogue-bubble" id="dialogue-bubble-box">
+            <div id="dialogue-char-name" class="dialogue-name">夥伴名字</div>
+            <div id="dialogue-text-content" class="dialogue-text">對話載入中...</div>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Bottom: Interactive Map Progress Track -->
+      <div class="parchment-card adventure-map-panel">
+        <div class="map-label">
+          <span>🏴‍☠️ 伊斯班紐拉號 航海進度圖</span>
+          <span style="font-size:0.9rem; color:#7f8c8d;">終點：弗林特的寶藏大洞 💎</span>
+        </div>
+        
+        <div class="map-track" id="map-track-bar">
+          <div id="map-stages-indicators" class="map-stages-indicators">
+            <!-- Stage marker dots -->
+          </div>
+          
+          <div id="map-progress-bar" class="map-progress-bar"></div>
+          
+          <div id="map-ship" class="map-ship-node">
+            <!-- Small pirate ship SVG -->
+            <svg viewBox="0 0 64 64" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 12 36 L 52 36 C 48 48, 16 48, 12 36 Z" fill="#795548" stroke="#3e2723" stroke-width="2"/>
+              <rect x="30" y="10" width="4" height="26" fill="#3e2723"/>
+              <!-- Sails -->
+              <path d="M 34 12 C 45 15, 45 25, 34 28 Z" fill="#f5f5f5" stroke="#ccc"/>
+              <path d="M 30 14 C 18 16, 18 26, 30 30 Z" fill="#f5f5f5" stroke="#ccc"/>
+              <!-- Flag -->
+              <path d="M 34 8 L 44 11 L 34 14 Z" fill="#c0392b"/>
+              <!-- Water Waves -->
+              <path d="M 6 42 Q 16 38, 26 42 Q 36 38, 46 42 Q 56 38, 60 42" stroke="#2980b9" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4: Certificate of Completion -->
+    <div id="screen-certificate" class="screen certificate-screen">
+      <div class="certificate-card">
+        <!-- Golden coin corners decoration -->
+        <div class="cert-corner cert-top-left">🪙</div>
+        <div class="cert-corner cert-top-right">🪙</div>
+        <div class="cert-corner cert-bottom-left">🪙</div>
+        <div class="cert-corner cert-bottom-right">🪙</div>
+
+        <div class="cert-header">
+          <div class="cert-flag">🏴‍☠️</div>
+          <h2 class="cert-title">金銀島的密碼羅盤</h2>
+          <div class="cert-subtitle">榮譽船長證書</div>
+        </div>
+
+        <div class="cert-body">
+          茲證明 <span id="cert-player-name" class="cert-name-highlight">冒險家</span> 同學，<br>
+          於西元 2026 年成功挑戰金銀島三大關卡：<br>
+          <strong>「班波提督亭」、「骷髏山脈」與「乾枯大洞」</strong>，<br>
+          展現了卓越的邏輯力與小六數學金頭腦！<br>
+          在 <strong>「<span id="cert-difficulty-name">骷髏礁的座標航線</span>」</strong> 考驗中克服險阻，以 <span id="cert-score-display" style="color: var(--color-accent-green); font-weight: bold;">0</span> / 100 分的成績順利通關。<span id="cert-question-count" style="display: none;">50</span><br>
+          <div style="text-align: center; margin-top: 15px; font-weight: bold; font-size: 1.25rem; color: var(--color-accent-red);">
+            特頒此證，以資鼓勵！
+          </div>
+          <div style="margin-top: 15px;">
+            同行夥伴：<span id="cert-companion-name" class="cert-companion-highlight">水手</span>
+          </div>
+        </div>
+
+        <div class="cert-compass-logo">🧭</div>
+
+        <div class="cert-footer">
+          <div>發證機關：傳奇船長弗林特遺囑管理處</div>
+          <div id="cert-date-display">認證日期：西元 2026 年 7 月 8 日</div>
+        </div>
+
+        <div class="cert-actions">
+          <button id="btn-restart-game" class="btn-gold">重新挑戰</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Load Questions database -->
+  <script src="questions.js"></script>
+  <!-- Load Game controller -->
+  <script src="game.js"></script>
+</body>
+</html>
