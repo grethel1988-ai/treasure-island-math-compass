@@ -2,16 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Noto+Sans+TC:wght@400;700;900&family=Outfit:wght@400;600;800&display=swap');
 
 :root {
-  --color-bg-dark: #07111a;
-  --color-bg-ocean: #102d3d;
-  --color-gold: #f39c12;
-  --color-gold-light: #f1c40f;
-  --color-parchment: #fdfaf2;
-  --color-parchment-shadow: #e5d8b8;
-  --color-text-dark: #1b2631;
-  --color-text-light: #ecf0f1;
-  --color-accent-red: #d9455f; /* Pinkish-red matching the pixel art coral mountains */
-  --color-accent-green: #1abc9c; /* Bright marine turquoise/green matching the sea */
+  --color-bg-dark: #030b11;
+  --color-bg-ocean: #091e2b;
+  --color-gold: #00ffd2; /* Bioluminescent Neon Cyan */
+  --color-gold-light: #80fff0; /* Light Neon Cyan */
+  --color-treasure-gold: #ffd700; /* Treasure Gold */
+  --color-treasure-gold-light: #fff075;
+  --color-parchment: rgba(8, 29, 43, 0.88); /* Deep Sea Glass background */
+  --color-parchment-shadow: rgba(0, 240, 255, 0.2);
+  --color-text-dark: #e0f7fa; /* Light seafoam white for readability on dark cards */
+  --color-text-light: #ffffff;
+  --color-accent-red: #ff5e7e; /* Neon Coral Pink */
+  --color-accent-green: #00ffd2; /* Bioluminescent Teal */
   
   --font-pirate: 'Cinzel', serif;
   --font-sans: 'Outfit', 'Noto Sans TC', sans-serif;
@@ -45,7 +47,7 @@ body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(9, 23, 34, 0.45); /* Dark cyan-navy tint overlay for readability */
+  background: radial-gradient(circle at center, rgba(12, 42, 62, 0.5) 0%, rgba(3, 11, 17, 0.85) 100%);
   z-index: -1;
   pointer-events: none;
 }
@@ -111,29 +113,32 @@ body::before {
 /* Card / Parchment Styling */
 .parchment-card {
   background: var(--color-parchment);
-  background-image: radial-gradient(circle at 30% 20%, #fefcf3 0%, var(--color-parchment) 100%);
+  background-image: radial-gradient(circle at 30% 20%, rgba(12, 48, 71, 0.9) 0%, rgba(8, 29, 43, 0.9) 100%);
   color: var(--color-text-dark);
-  border: 8px double #ffd700;
-  border-image: linear-gradient(135deg, var(--color-gold) 0%, #b8860b 50%, var(--color-gold) 100%) 8;
-  border-radius: 12px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 60px rgba(139,90,43,0.15);
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6), 
+              0 0 25px rgba(0, 240, 255, 0.15),
+              inset 0 0 30px rgba(0, 240, 255, 0.05);
+  backdrop-filter: blur(12px);
   padding: 40px;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .parchment-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.01'/%3E%3C/svg%3E");
   pointer-events: none;
 }
 
 /* Buttons */
 .btn-gold {
-  background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 100%);
-  color: var(--color-text-dark);
+  background: linear-gradient(135deg, var(--color-treasure-gold-light) 0%, var(--color-treasure-gold) 100%);
+  color: #030b11;
   border: 2px solid #b8860b;
   border-radius: 30px;
   font-family: var(--font-pirate);
@@ -141,7 +146,7 @@ body::before {
   font-weight: 800;
   padding: 14px 32px;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(243,156,18,0.4);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.25), 0 0 10px rgba(0, 255, 210, 0.15);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   outline: none;
   text-transform: uppercase;
@@ -149,8 +154,8 @@ body::before {
 
 .btn-gold:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(243,156,18,0.6);
-  background: linear-gradient(135deg, #fff275 0%, var(--color-gold-light) 100%);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4), 0 0 20px rgba(0, 255, 210, 0.4);
+  background: linear-gradient(135deg, #ffffff 0%, var(--color-treasure-gold-light) 100%);
 }
 
 .btn-gold:active {
@@ -194,7 +199,7 @@ body::before {
 }
 
 .story-box {
-  background: rgba(139,90,43,0.06);
+  background: rgba(0, 240, 255, 0.05);
   border-left: 5px solid var(--color-gold);
   padding: 20px;
   margin: 30px 0;
@@ -219,8 +224,8 @@ body::before {
 }
 
 .input-field {
-  background: #fff;
-  border: 2px solid var(--color-parchment-shadow);
+  background: rgba(5, 18, 26, 0.6);
+  border: 2px solid rgba(0, 240, 255, 0.3);
   border-radius: 25px;
   padding: 12px 24px;
   font-size: 1.1rem;
@@ -229,12 +234,13 @@ body::before {
   text-align: center;
   outline: none;
   transition: all 0.3s;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  color: #fff;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
 }
 
 .input-field:focus {
   border-color: var(--color-gold);
-  box-shadow: 0 0 8px rgba(243,156,18,0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 210, 0.4);
 }
 
 /* Character Selection Screen */
@@ -261,8 +267,8 @@ body::before {
 }
 
 .char-card {
-  background: rgba(255,255,255,0.7);
-  border: 2px solid var(--color-parchment-shadow);
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(0, 240, 255, 0.15);
   border-radius: 12px;
   padding: 15px;
   text-align: center;
@@ -271,20 +277,20 @@ body::before {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
 }
 
 .char-card:hover {
   transform: translateY(-8px);
   border-color: var(--color-gold);
-  box-shadow: 0 10px 20px rgba(243,156,18,0.25);
-  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 255, 210, 0.2);
+  background: rgba(0, 255, 210, 0.05);
 }
 
 .char-card.selected {
   border-color: var(--color-gold);
-  background: rgba(241,196,15,0.15);
-  box-shadow: 0 0 15px rgba(241,196,15,0.4);
+  background: rgba(0, 255, 210, 0.10);
+  box-shadow: 0 0 15px rgba(0, 255, 210, 0.3);
 }
 
 .char-avatar-container {
@@ -293,8 +299,8 @@ body::before {
   border-radius: 50%;
   margin: 0 auto 10px;
   overflow: hidden;
-  background: linear-gradient(135deg, #e8f0fe, #fff);
-  border: 3px solid var(--color-parchment-shadow);
+  background: rgba(5, 18, 26, 0.6);
+  border: 3px solid rgba(0, 240, 255, 0.25);
   transition: border-color 0.3s;
   display: flex;
   align-items: center;
@@ -350,8 +356,8 @@ body::before {
 
 .stage-badge {
   display: inline-block;
-  background: var(--color-text-dark);
-  color: var(--color-gold-light);
+  background: var(--color-bg-dark);
+  color: var(--color-gold);
   font-family: var(--font-pirate);
   padding: 6px 16px;
   border-radius: 20px;
@@ -359,13 +365,14 @@ body::before {
   font-weight: bold;
   margin-bottom: 15px;
   align-self: flex-start;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(0, 240, 255, 0.2);
 }
 
 .progress-text {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #7f8c8d;
+  color: #80c4ff;
   margin-bottom: 15px;
 }
 
@@ -404,8 +411,9 @@ body::before {
 
 .indicator-hint {
   font-size: 0.85rem;
-  color: #7f8c8d;
-  background: rgba(0,0,0,0.03);
+  color: #80c4ff;
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px dashed rgba(0, 240, 255, 0.15);
   padding: 8px 12px;
   border-radius: 6px;
   margin-bottom: 20px;
@@ -421,8 +429,8 @@ body::before {
 }
 
 .option-btn {
-  background: #fff;
-  border: 2px solid var(--color-parchment-shadow);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(0, 240, 255, 0.2);
   border-radius: 8px;
   padding: 20px;
   font-size: 1.1rem;
@@ -433,15 +441,16 @@ body::before {
   text-align: left;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
   line-height: 1.5;
 }
 
 .option-btn:hover {
   border-color: var(--color-gold);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(243,156,18,0.15);
-  background: rgba(243,156,18,0.02);
+  box-shadow: 0 6px 18px rgba(0, 255, 210, 0.3), inset 0 0 8px rgba(0, 255, 210, 0.1);
+  background: rgba(0, 255, 210, 0.08);
+  color: #fff;
 }
 
 .option-btn:active {
@@ -469,12 +478,12 @@ body::before {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  background: #fff;
+  background: rgba(5, 18, 26, 0.6);
   border: 4px solid var(--color-gold);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.25);
   margin-bottom: 25px;
   animation: float 4s ease-in-out infinite;
   cursor: pointer;
@@ -485,14 +494,14 @@ body::before {
 }
 
 .dialogue-bubble {
-  background: #fff;
-  border: 2px solid var(--color-parchment-shadow);
+  background: rgba(224, 247, 250, 0.95);
+  border: 2px solid rgba(0, 240, 255, 0.5);
   border-radius: 12px;
   padding: 20px;
   position: relative;
   width: 100%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
+  color: #00363a;
 }
 
 .dialogue-bubble::before {
@@ -503,7 +512,7 @@ body::before {
   margin-top: -8px;
   border-width: 8px;
   border-style: solid;
-  border-color: transparent #fff transparent transparent;
+  border-color: transparent #e0f7fa transparent transparent;
   display: block;
   z-index: 2;
 }
@@ -516,7 +525,7 @@ body::before {
   margin-top: -9px;
   border-width: 9px;
   border-style: solid;
-  border-color: transparent var(--color-parchment-shadow) transparent transparent;
+  border-color: transparent rgba(0, 240, 255, 0.5) transparent transparent;
   display: block;
   z-index: 1;
 }
@@ -540,13 +549,14 @@ body::before {
 .adventure-map-panel {
   margin-top: 30px;
   padding: 20px 30px;
-  background: rgba(253, 250, 242, 0.92); /* Rich semi-transparent parchment paper background */
+  background: var(--color-parchment);
   border-radius: 12px;
-  border: 3px double var(--color-gold); /* Classic treasure map double border */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.1);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  backdrop-filter: blur(12px);
 }
 
 .map-label {
@@ -562,16 +572,16 @@ body::before {
 .map-track {
   position: relative;
   height: 24px;
-  background: #e2d7b5; /* Sand-colored navigation channel */
+  background: rgba(5, 18, 26, 0.8);
   border-radius: 12px;
-  border: 1px solid var(--color-parchment-shadow);
-  box-shadow: inset 0 3px 6px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.4);
   overflow: visible;
 }
 
 .map-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #1abc9c 0%, #2ecc71 100%);
+  background: linear-gradient(90deg, #00f0ff 0%, #00ffd2 100%);
   border-radius: 12px;
   width: 0%;
   transition: width 0.6s ease;
@@ -623,14 +633,14 @@ body::before {
 .certificate-card {
   width: 100%;
   max-width: 850px;
-  background: #fdfaf2;
-  border: 15px solid #2c3e50;
-  border-image: linear-gradient(135deg, var(--color-gold) 0%, #b8860b 30%, #ffd700 50%, #b8860b 70%, var(--color-gold) 100%) 15;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  background: rgba(8, 29, 43, 0.95);
+  border: 12px solid rgba(0, 255, 210, 0.5);
+  border-image: linear-gradient(135deg, var(--color-treasure-gold) 0%, var(--color-accent-green) 50%, var(--color-treasure-gold) 100%) 12;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0, 255, 210, 0.25);
   padding: 20px 40px;
   text-align: center;
   position: relative;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 /* Coin details for border decoration */
@@ -639,8 +649,8 @@ body::before {
   width: 50px;
   height: 50px;
   font-size: 2.2rem;
-  color: var(--color-gold);
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  color: var(--color-treasure-gold);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
 
 .cert-top-left { top: 15px; left: 15px; }
@@ -661,9 +671,10 @@ body::before {
   font-family: var(--font-pirate);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--color-text-dark);
+  color: var(--color-text-light);
   letter-spacing: 2px;
   text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(0, 255, 210, 0.6);
 }
 
 .cert-subtitle {
@@ -678,7 +689,7 @@ body::before {
   margin: 15px 0;
   line-height: 1.6;
   font-size: 1rem;
-  color: #333;
+  color: #b2ebf2;
 }
 
 .cert-name-highlight {
@@ -693,7 +704,7 @@ body::before {
 
 .cert-companion-highlight {
   font-weight: bold;
-  color: #2980b9;
+  color: var(--color-accent-green);
 }
 
 .cert-compass-logo {
@@ -714,7 +725,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: #666;
+  color: #ffffff;
   border-top: 1px solid var(--color-parchment-shadow);
   padding-top: 10px;
 }
@@ -776,20 +787,21 @@ body::before {
 
 /* Difficulty Selection styling */
 .diff-card {
-  border: 2px solid var(--color-parchment-shadow) !important;
+  border: 2px solid rgba(0, 240, 255, 0.2) !important;
   transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-  background: rgba(255,255,255,0.65) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-text-dark) !important;
 }
 .diff-card:hover {
   transform: translateY(-3px);
   border-color: var(--color-gold) !important;
-  box-shadow: 0 6px 15px rgba(243,156,18,0.15);
-  background: #fff !important;
+  box-shadow: 0 6px 15px rgba(0, 255, 210, 0.25);
+  background: rgba(0, 255, 210, 0.05) !important;
 }
 .diff-card.selected {
   border-color: var(--color-accent-red) !important;
-  background: rgba(192, 57, 43, 0.08) !important;
-  box-shadow: inset 0 0 10px rgba(192,57,43,0.05), 0 6px 20px rgba(192, 57, 43, 0.15) !important;
+  background: rgba(255, 94, 126, 0.1) !important;
+  box-shadow: inset 0 0 10px rgba(255, 94, 126, 0.1), 0 6px 20px rgba(255, 94, 126, 0.2) !important;
 }
 
 /* Responsive Queries */
@@ -818,14 +830,14 @@ body::before {
     top: -16px;
     left: 50px;
     margin-top: 0;
-    border-color: transparent transparent #fff transparent;
+    border-color: transparent transparent #e0f7fa transparent;
   }
   
   .dialogue-bubble::after {
     top: -19px;
     left: 49px;
     margin-top: 0;
-    border-color: transparent transparent var(--color-parchment-shadow) transparent;
+    border-color: transparent transparent rgba(0, 240, 255, 0.5) transparent;
   }
 }
 
@@ -862,14 +874,14 @@ body::before {
     top: 50%;
     left: -16px;
     margin-top: -8px;
-    border-color: transparent #fff transparent transparent;
+    border-color: transparent #e0f7fa transparent transparent;
   }
   
   .dialogue-bubble::after {
     top: 50%;
     left: -19px;
     margin-top: -9px;
-    border-color: transparent var(--color-parchment-shadow) transparent transparent;
+    border-color: transparent rgba(0, 240, 255, 0.5) transparent transparent;
   }
   
   .certificate-card {
