@@ -672,38 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetGameToIntro();
   });
   
-  // Developer Shortcuts for quick game testing (F2: instant win, F3: auto-solve question, F4: highlight correct answer)
-  document.addEventListener('keydown', (e) => {
-    const gameScreen = document.getElementById('screen-game');
-    if (!gameScreen || gameScreen.style.display !== 'flex') return;
 
-    if (e.key === 'F2') {
-      // 1. Instantly skip to victory certificate screen
-      const totalQ = gameState.gameQuestions.length;
-      gameState.score = Math.round(totalQ * 0.84); // mock 84% score
-      completeAdventure();
-    } else if (e.key === 'F3') {
-      // 2. Auto-solve current question correctly and transition
-      if (!gameState.canAnswer) return;
-      const q = gameState.gameQuestions[gameState.currentQuestionIdx];
-      const buttons = document.querySelectorAll('.option-btn');
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-option-text') === q.answer) {
-          btn.click();
-        }
-      });
-    } else if (e.key === 'F4') {
-      // 3. Highlight the correct answer with a golden glowing border
-      const q = gameState.gameQuestions[gameState.currentQuestionIdx];
-      const buttons = document.querySelectorAll('.option-btn');
-      buttons.forEach(btn => {
-        if (btn.getAttribute('data-option-text') === q.answer) {
-          btn.style.border = '3px solid var(--color-gold)';
-          btn.style.boxShadow = '0 0 15px rgba(243, 156, 18, 0.6)';
-        }
-      });
-    }
-  });
 });
 
 // Render Character selection cards
